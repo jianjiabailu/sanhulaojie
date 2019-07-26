@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "element-ui": "^2.11.0",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.7",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
