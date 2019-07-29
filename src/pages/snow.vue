@@ -19,14 +19,7 @@
 			}
 		},
 		mounted(){
-			 for(var i=0;i<10;i++){
-				  setTimeout(console.log(i),1000);
-			  }
-			  for(var i=0;i<10;i++){
-				 setTimeout(function(){
-					 console.log(i);  //连续的10个10
-				 },1000);
-			 }
+			
 		},
 		methods:{
 			 // openFullScreen() {

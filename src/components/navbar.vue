@@ -6,8 +6,7 @@
 				<router-link class="c-link" to="/love">表白</router-link>
 				<router-link class="c-link" to="/snow">下雪</router-link>
 				<router-link class="c-link" to="/gallery">图库</router-link>
-				<router-link class="c-link" to="/teamDetail">团队详情</router-link>
-				<router-link class="c-link" to="/survey">答题</router-link>
+				<router-link class="c-link" to="/projects">我的项目</router-link>
 			</div>
 		</div>
 		<div class="nav-item">

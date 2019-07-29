@@ -20,6 +20,7 @@ export default {
 	.container{
 		width: 100vw;
 		min-height: 100vh;
+		overflow-x: hidden;
 		position: relative;
 	}
 	/* 消除按钮的默认样式 */

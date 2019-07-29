@@ -11,7 +11,9 @@ let routes = [
 			{ path: '/love', component: Pages.mylove},
 			{ path: '/teamDetail', component: Pages.teamDetail},
 			{ path: '/survey', component: Pages.survey},
-			{ path: '/projects', component: Pages.projects}
+			{ path: '/projects', component: Pages.projects},
+			{ path: '/create', component: Pages.create},
+			{ path: '/', redirect: '/gallery'}
 		]
 	},
 	{ path: '/*', redirect: '/hello'}

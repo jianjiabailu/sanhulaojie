@@ -1,15 +1,11 @@
 
-
 .flex-row{display: flex;flex-direction: row;}
 .flex-col{display: flex;flex-direction: column;}
 
-.flex-row .between{justify-content: space-between;}
-.flex-row .around{justify-content: space-around;}
-.flex-row .center{justify-content: center;}
+.flex-row.between{justify-content: space-between;}
+.flex-row.around{justify-content: space-around;}
+.flex-row.j-center{justify-content: center;}
+.flex-row.wrap{flex-wrap: wrap;}
+.flex-row.nowrap{flex-wrap: nowrap;}
+.flex-row.a-center{align-items: center;}
 
-.flex-row .a-center{align-items: center;}
-
-
-.theme-color{
-	color: red;
-}
