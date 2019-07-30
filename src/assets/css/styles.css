@@ -1,6 +1,8 @@
 
 .flex-row{display: flex;flex-direction: row;}
+.flex-row-r{display: flex;flex-direction: row-reverse;}
 .flex-col{display: flex;flex-direction: column;}
+.flex-col-r{display: flex;flex-direction: column-reverse;}
 
 .flex-row.between{justify-content: space-between;}
 .flex-row.around{justify-content: space-around;}

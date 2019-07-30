@@ -1,20 +1,34 @@
 <template>
 	<div class="navbar">
-		<div class="nav-item">
-			<div class="item-tit">页面导航</div>
-			<div class="item-cont">
-				<router-link class="c-link" to="/love">表白</router-link>
-				<router-link class="c-link" to="/snow">下雪</router-link>
-				<router-link class="c-link" to="/gallery">图库</router-link>
-				<router-link class="c-link" to="/projects">我的项目</router-link>
-			</div>
+		<div class="flex-row j-center navbar-title">
+			<el-switch v-model="isCollapse"></el-switch>
 		</div>
-		<div class="nav-item">
-			<div class="item-tit">回到顶部</div>
-		</div>
-		<div class="nav-item">
-			<div class="item-tit"><a href="http://blog.sanhulaojie.cn" target="_blank">我的博客</a></div>
-		</div>
+		<el-menu :collapse="!isCollapse">
+		  <el-menu-item>
+			<i class="el-icon-folder"></i>
+			<router-link slot="title" class="c-link" to="/gallery">图库</router-link>
+		  </el-menu-item>
+		  <el-menu-item>
+			<i class="el-icon-document"></i>
+			<router-link slot="title" class="c-link" to="/projects">项目</router-link>
+		  </el-menu-item>
+		  <el-menu-item>
+			<i class="el-icon-user"></i>
+			<router-link slot="title" class="c-link" to="/mine">我的</router-link>
+		  </el-menu-item>
+		  <el-menu-item>
+			<i class="el-icon-collection-tag"></i>
+			<router-link slot="title" class="c-link" to="/mine">收藏夹</router-link>
+		  </el-menu-item>
+		  <el-menu-item>
+			<i class="el-icon-eleme"></i>
+			<a slot="title" href="http://blog.sanhulaojie.cn" target="_blank">博客</a>
+		  </el-menu-item>
+		  <el-menu-item>
+			<i class="el-icon-setting"></i>
+			<router-link slot="title" class="c-link" to="/setting">设置</router-link>
+		  </el-menu-item>
+		</el-menu>
 	</div>
 </template>
 
@@ -23,23 +37,35 @@
 		name: 'ly-navbar',
 		data(){
 			return {
-				
+				isCollapse: true
 			}
+		},
+		methods: {
+		  handleOpen(key, keyPath) {
+			console.log(key, keyPath);
+		  },
+		  handleClose(key, keyPath) {
+			console.log(key, keyPath);
+		  }
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	img{max-width: 100%;}
 	.navbar{
 		display: flex;
 		flex-direction: column;
-		background-color: antiquewhite;
+		height: 100vh;
+		overflow-y: auto;
+		background-color: white;
 	}
-	.navbar .nav-item{
-		font-size: 14px;
-		padding: 10px 5px;
-		position: relative;
+	.navbar-title{
+		padding: 1em 0;
+		border-right: solid 1px #e6e6e6;;
+	}
+	.navbar ul{
+		height: 100%;
 	}
 	
 	.item-tit{

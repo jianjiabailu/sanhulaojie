@@ -12,7 +12,7 @@
 
 <script>
 	export default {
-		name: "snow",
+		name: "setting",
 		data(){
 			return {
 				

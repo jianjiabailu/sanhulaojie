@@ -3,9 +3,6 @@
 		<div class="h-top">
 			
 		</div>
-		<!-- <div class="h-logo">
-			<img alt="Vue logo" src="../assets/logo.png">
-		</div> -->
 	</div>
 </template>
 

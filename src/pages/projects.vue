@@ -54,7 +54,7 @@
 		},
 		methods:{
 			handleSelect() {
-				console.log('go back');
+				
 			},
 			create(){
 				this.$router.push('/create')

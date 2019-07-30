@@ -2,8 +2,8 @@
 	<div class="gallery">
 		<div class="gallery-hd flex-row around">
 			<input class="input" type="text" @blur="search" placeholder="随便输点什么吧">
-			<label class="btn" for="upload">上传</label>
-			<button class="btn" @click="getImages">获取图片</button>
+			<label class="btn" for="upload"><i class="el-icon-upload"></i>上传</label>
+			<button class="btn" @click="getImages"><i class="el-icon-picture"></i>获取图片</button>
 			<input id="upload" hidden="hidden" type="file" @change="uploadImg">
 		</div>
 		<div class="gallery-bd">
@@ -99,11 +99,8 @@
 <style scoped>
 	.gallery{
 		box-sizing: border-box;
-		padding-top: 60px;
 	}
 	.gallery-hd{
-		position: fixed;
-		left: 0; top: 0;
 		width: 100%; height: 50px;
 		box-sizing: border-box;
 		padding: .5em 1em;

@@ -5,7 +5,12 @@
 <script>
 
 export default {
-  name: 'app'
+	name: 'app',
+	watch: {
+		$route(to,from){
+			document.title = to.name
+		}
+	}
 }
 </script>
 

@@ -1,54 +1,62 @@
 <template>
   <div class="hello" id="starrySky">
-    <swing-girl size="150"></swing-girl>
-	<div class="search-box">
-		<div class="input-item">
-			<input type="text" v-model="searchValue">
-			<button @click="searchBD" >搜索</button>
-		</div>
-		<!-- 收藏链接 -->
-		<div class="quick-link">
-			<el-row :gutter="10">
-			  <el-col :span="6" v-for="item in quickLinks" :key="item.path">
-				  <a class="link flex-row a-center j-center" :href="item.path" target="_blank">
-				  	{{item.name}}
-				  </a>
-			  </el-col>
-			</el-row>
-		</div>
-		<!-- 编辑链接 -->
-		<ul class="edit-link" v-if="editBox.view">
-			<li class="flex-row between input-item" v-for="(item,index) in editBox.links" :key="item.path">
-				<input class="name" type="text" v-model="item.name" placeholder="网站名称">
-				<input class="path" type="text" v-model="item.path" placeholder="网站地址">
-				<button @click="delLink(index)">删除</button>
-			</li>
-			<li class="flex-row around">
-				<button class="edit-btn" @click="addLink">添加</button>
-				<button class="edit-btn" @click="hideEditBox">保存</button>
-			</li>
-		</ul>
+	<div class="box-fd flex-row-r a-center" v-if="loginsign">
+		<router-link to="/mine"><el-avatar size="medium" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar></router-link>
+		<a><i class="el-icon-switch-button"></i>注销</a>
+		<router-link to="/projects">项目</router-link>
+		<router-link to="/gallery">相册</router-link>
 	</div>
-	<div class="diy-box flex-col" @click="diyView = !diyView">
-		<div v-if="diyView">
-			<button @click="dialogView = true">登录</button>
-			<button @click="showEditBox">编辑</button>
+	<div class="box-hd">
+		<swing-girl size="150"></swing-girl>
+		<div class="search-box">
+			<div class="input-item">
+				<input type="text" v-model="searchValue" @keyup="searchBD">
+				<button @click="searchBD" >搜索</button>
+			</div>
+			<!-- 收藏链接 -->
+			<div class="quick-link">
+				<el-row :gutter="10">
+				  <el-col :span="6" v-for="item in quickLinks" :key="item.path">
+					  <a class="link" :href="item.path" target="_blank"><i class="el-icon-star-on"></i>{{item.name}}</a>
+				  </el-col>
+				  <el-col :span="6">
+					  <button class="link" @click="showEditBox"><i class="el-icon-edit"></i>编辑</button>
+				  </el-col>
+				</el-row>
+			</div>
+			<!-- 编辑链接 -->
+			<ul class="edit-link" v-if="editBox.view">
+				<li class="flex-row between input-item" v-for="(item,index) in editBox.links" :key="item.path">
+					<input class="name" type="text" v-model="item.name" placeholder="网站名称">
+					<input class="path" type="text" v-model="item.path" placeholder="网站地址">
+					<button @click="delLink(index)">删除</button>
+				</li>
+				<li class="flex-row around">
+					<button class="edit-btn" @click="addLink">添加</button>
+					<button class="edit-btn" @click="hideEditBox">保存</button>
+				</li>
+			</ul>
 		</div>
+		<!-- 自定义栏 -->
+		<div class="diy-box flex-col" @click="dialogView=true">
+			<!-- 登录按钮 -->
+			<div class="login-btn"><img src="../assets/img/Earth.png" alt=""></div>
+		</div>
+		<!-- 登录框 -->
+		<ly-dialog size="sm" v-if="dialogView">
+			<div>对话框</div>
+			<div class="input-item">
+				<input type="text" placeholder="用户名">
+			</div>
+			<div class="input-item">
+				<input type="password" placeholder="密码">
+			</div>
+			<div class="flex-row around">
+				<el-button size="medium" @click="dialogView=false">取消</el-button>
+				<el-button size="medium" type="primary" @click="submit">登录</el-button>
+			</div>
+		</ly-dialog>
 	</div>
-	
-	<ly-dialog size="sm" v-if="dialogView">
-		对话框
-		<div class="input-item">
-			<input type="text">
-		</div>
-		<div class="input-item">
-			<input type="text">
-		</div>
-		<div class="flex-row around">
-			<el-button @click="dialogView=false">取消</el-button>
-			<el-button type="primary" @click="submit">登录</el-button>
-		</div>
-	</ly-dialog>
 	
   </div>
 </template>
@@ -63,22 +71,20 @@ export default {
 	  editBox: {view: false,links: []},
 	  username: '',
 	  password: '',
-	  isActive: false,
 	  dialogView: false,
-	  diyView: false,
-	  loginsign: false
+	  loginsign: localStorage.getItem('token') ? true : false
     }
   },
   mounted(){
 	let starrySky = document.querySelector("#starrySky")
 	let can = document.createElement('canvas');
 	can.style = `
-		z-index: -1;
+		z-index: 2;
 		position: absolute;
 		top: 0; left: 0;
 		width: 100%;
 		height: 100%;
-		background:#000;
+		background: transparent;
 	`;
 	let cxt = can.getContext('2d');
 	starrySky.appendChild(can)
@@ -138,8 +144,8 @@ export default {
 		var r = 15;
 		var rad = cxt.createRadialGradient(x, y, 0, x, y, r);
 		rad.addColorStop(0, 'rgba(255,255,255,0.8)');
-		rad.addColorStop(0.1, 'rgba(255,255,255,0.8)');
-		rad.addColorStop(0.2, 'rgba(255,255,255,0.08)');
+		rad.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+		rad.addColorStop(0.3, 'rgba(255,255,255,0.08)');
 		rad.addColorStop(1, 'rgba(255,255,255,0)');
 		cxt.fillStyle = rad;
 		cxt.beginPath();
@@ -199,7 +205,7 @@ export default {
 			console.log('login',res)
 			if(res.status == 200){
 				localStorage.setItem('token',res.data.token)
-				this.$data.diyView = false;
+				this.$data.dialogView = false;
 				this.$data.loginsign = true;
 			}
 		}, err => {
@@ -213,7 +219,11 @@ export default {
 	  },
 	  // 编辑
 	  showEditBox(){
+		// 关闭操作框
+		this.$data.diyView = false;
+		// 打开编辑框
 		this.$data.editBox.view = true;
+		// 获取编辑列表
 		this.$data.editBox.links = JSON.parse(localStorage.getItem('quickLinks'));
 	  },
 	  // 保存
@@ -244,6 +254,31 @@ export default {
 	.hello{
 		box-sizing: border-box;
 		background: transparent;
+		width: 100vw; height: 100vh;
+		overflow: hidden;
+		background: url(../assets/img/starry-5.jpg) no-repeat;
+		background-size: 100% 100%;
+	}
+	.box-fd{
+		z-index: 10;
+		position: fixed;
+		left: 0; top: 0;
+		width: 100%; height: 50px;
+		box-sizing: border-box;
+		background-color: rgba(100,100,100,.5);
+	}
+	.box-fd a{
+		color: white;
+		line-height: 50px;
+		margin: 0 1em;
+		display: inline-block;
+	}
+	.box-fd img{vertical-align: middle;}
+	
+	.hello > .box-hd{
+		z-index: 9;
+		width: 100%; height: 100%;
+		position: relative;
 	}
 	button{cursor: pointer;}
 	.search-box{
@@ -316,14 +351,15 @@ export default {
 		padding: 1em 0;
 	}
 	.quick-link .link{
+		display: block;
 		color: #1BC8E0;
 		width: 100%;
 		height: 30px;
+		line-height: 30px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-align: center;
-		line-height: 30px;
-		font-size: 1em;
+		text-overflow: ellipsis;
 		margin-bottom: 1em;
 		background-color: rgba(255,255,255,.3);
 	}
@@ -331,29 +367,31 @@ export default {
 	.link .ico{width: 1em;display: inline-block;margin-right: .5em;}
 	
 	.diy-box{
-		width: 60px; height: 60px;
+		width: 100%;
 		position: fixed;
+		left: 0; bottom: 20%;
 		overflow: hidden;
-		right: 2em; bottom: 2em;
-		background-color: white;
-		border-radius: 60px;
-		background: #02aeff;
 	}
-	.diy-box:hover{
-		height: 100px; 
-		padding: 30px 0;
-		overflow-y: auto;
-		transition: all .3s ease-in-out;
-	}
-	.diy-box button{
-		display: none;
-		padding: 1em 0;
-		background-color: transparent;
-		border-bottom: 1px solid #CCCCCC;
-	}
-	.diy-box:hover button{
+	.login-btn{
 		display: block;
+		margin: 0 auto;
+		width: 100px; height: 100px;
+		border-radius: 60px;
+		animation: spin 10s linear 100ms infinite ;
 	}
+	@keyframes spin{
+		from{
+			transform: rotate(0);
+		}
+		to{
+			transform: rotate(360deg);
+		}
+	}
+	.login-btn img{
+		cursor: pointer;
+		width: 100%; height: 100%;
+	}
+	
 	.edit-link{
 		position: relative;
 		width: 80%; max-width: 650px;

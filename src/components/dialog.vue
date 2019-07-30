@@ -1,7 +1,7 @@
 <template>
 	<div class="dialog">
 		<div class="content" @click.stop="preventDefault">
-			<span class="delete" @click="close">删除</span>
+			<span class="delete" @click="close"><i class="el-icon-close"></i></span>
 			<slot></slot>
 		</div>
 	</div>
@@ -32,8 +32,9 @@
 	}
 	.dialog .content{
 		width: 60%;
+		max-width: 450px;
 		min-height: 100px;
-		padding: 1em;
+		padding: 1.5em 1em;
 		margin: 10% auto;
 		position: relative;
 		border-radius: 5px;
@@ -44,6 +45,10 @@
 	}
 	.dialog .content.lg{
 		width: 80%;
+	}
+	.dialog .content .input-item{
+		color: #333333;
+		margin: 1em auto;
 	}
 	.delete{
 		cursor: pointer;

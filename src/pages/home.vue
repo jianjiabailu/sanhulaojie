@@ -1,7 +1,10 @@
 <template>
-	<div class="home">
-		<ly-navbar class="fixed-box"></ly-navbar>
-		<keep-alive><router-view></router-view></keep-alive>
+	<div class="homePage">
+		<ly-navbar></ly-navbar>
+		<div class="content">
+			<keep-alive><router-view></router-view></keep-alive>
+		</div>
+		
 	</div>
 </template>
 
@@ -12,13 +15,21 @@
 </script>
 
 <style scoped>
-	.fixed-box{
-		z-index: 999;
-		position: fixed;
-		left: -46px; top: 60%;
+	.homePage{
+		display: flex;
+		height: 100vh;
+		overflow: hidden;
 	}
-	.fixed-box:hover{
-		left: 0;
+	.homePage .content{
+		flex: 1;
+		height: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
+		position: relative;
+		box-sizing: border-box;
 	}
-	
+	.breadcrumb{
+		padding: 1em;
+		border-bottom: 1px solid #e6e6e6;
+	}
 </style>
