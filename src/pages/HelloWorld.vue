@@ -5,12 +5,14 @@
 		<a><i class="el-icon-switch-button"></i>注销</a>
 		<router-link to="/projects">项目</router-link>
 		<router-link to="/gallery">相册</router-link>
+		<a href="javascript:setHome(this,window.location)"><i class="el-icon-switch-button"></i>设为主页</a>
+		<a href="javascript:addFavorite()"><i class="el-icon-switch-button"></i>收藏</a>
 	</div>
 	<div class="box-hd">
 		<swing-girl size="150"></swing-girl>
 		<div class="search-box">
 			<div class="input-item">
-				<input type="text" v-model="searchValue" @keyup="searchBD">
+				<input type="text" v-model="searchValue" @keyup.enter="searchBD">
 				<button @click="searchBD" >搜索</button>
 			</div>
 			<!-- 收藏链接 -->
@@ -198,7 +200,7 @@ export default {
   },
   methods: {
 	  submit(){
-		this.$http.post('http://localhost:8888/admin/user',{},{
+		this.$http.post('http://api.sanhulaojie.cn:8888/admin/user',{},{
 			headers: {'method': 'login'}
 		}).then(res => {
 			// get body data

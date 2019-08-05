@@ -6,17 +6,24 @@
 		  <el-menu-item index="3">我的插件</el-menu-item>
 		  <el-menu-item index="4" @click="create">添加</el-menu-item>
 		</el-menu>
-		<ly-card v-for="item in projectList" :key="item.id" >
-			<div class="card-hd"><img slot='card-hd' :src="item.thumb" class="image"></div>
-			<div class="card-bd">
-				<h3>{{item.name}}</h3>
-				<div>{{item.intro}}</div>
-			</div>
-			<div class="card-fd flex-row between a-center">
-				<time>{{ item.createDate }}</time>
-				<a :href="item.link">前往项目</a>
-			</div>
-		</ly-card>
+		<div class="page-bd">
+			<el-row :gutter="10">
+			  <el-col :sm="12" :lg="4" v-for="item in projectList" :key="item.id" >
+				  <ly-card>
+				  	<div class="card-hd"><img slot='card-hd' :src="item.thumb" class="image"></div>
+				  	<div class="card-bd">
+				  		<h3>{{item.name}}</h3>
+				  		<div>{{item.intro}}</div>
+				  	</div>
+				  	<div class="card-fd flex-row between a-center">
+				  		<time>{{ item.createDate }}</time>
+				  		<a :href="item.link">前往项目</a>
+				  	</div>
+				  </ly-card>
+			  </el-col>
+			</el-row>
+		</div>
+		
 	</div>
 </template>
 
@@ -66,6 +73,8 @@
 
 <style scoped>
 	.el-page-header{padding: 1em;}
-	.card{width: 90%;}
+	
 	.card:not(:first-child){margin: 20px auto;}
 </style>
+
+

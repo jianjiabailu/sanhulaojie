@@ -1,9 +1,9 @@
 <template>
 	<div class="navbar">
-		<div class="flex-row j-center navbar-title">
-			<el-switch v-model="isCollapse"></el-switch>
-		</div>
-		<el-menu :collapse="!isCollapse">
+		<!-- <div class="flex-row j-center navbar-title">
+			<el-switch v-model="$store.state.isCollapse"></el-switch>
+		</div> -->
+		<el-menu :collapse="!$store.state.isCollapse">
 		  <el-menu-item>
 			<i class="el-icon-folder"></i>
 			<router-link slot="title" class="c-link" to="/gallery">图库</router-link>
@@ -18,7 +18,7 @@
 		  </el-menu-item>
 		  <el-menu-item>
 			<i class="el-icon-collection-tag"></i>
-			<router-link slot="title" class="c-link" to="/mine">收藏夹</router-link>
+			<router-link slot="title" class="c-link" to="/favorite">收藏夹</router-link>
 		  </el-menu-item>
 		  <el-menu-item>
 			<i class="el-icon-eleme"></i>

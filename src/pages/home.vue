@@ -1,10 +1,10 @@
 <template>
 	<div class="homePage">
 		<ly-navbar></ly-navbar>
-		<div class="content">
-			<keep-alive><router-view></router-view></keep-alive>
+		<div class="content flex-col">
+			<ly-header></ly-header>
+			<keep-alive><router-view class="flex"></router-view></keep-alive>
 		</div>
-		
 	</div>
 </template>
 
