@@ -1,34 +1,31 @@
 <template>
 	<div class="navbar">
-		<!-- <div class="flex-row j-center navbar-title">
-			<el-switch v-model="$store.state.isCollapse"></el-switch>
-		</div> -->
-		<el-menu :collapse="!$store.state.isCollapse">
-		  <el-menu-item>
-			<i class="el-icon-folder"></i>
-			<router-link slot="title" class="c-link" to="/gallery">图库</router-link>
-		  </el-menu-item>
-		  <el-menu-item>
-			<i class="el-icon-document"></i>
-			<router-link slot="title" class="c-link" to="/projects">项目</router-link>
-		  </el-menu-item>
-		  <el-menu-item>
-			<i class="el-icon-user"></i>
-			<router-link slot="title" class="c-link" to="/mine">我的</router-link>
-		  </el-menu-item>
-		  <el-menu-item>
-			<i class="el-icon-collection-tag"></i>
-			<router-link slot="title" class="c-link" to="/favorite">收藏夹</router-link>
-		  </el-menu-item>
-		  <el-menu-item>
-			<i class="el-icon-eleme"></i>
-			<a slot="title" href="http://blog.sanhulaojie.cn" target="_blank">博客</a>
-		  </el-menu-item>
-		  <el-menu-item>
-			<i class="el-icon-setting"></i>
-			<router-link slot="title" class="c-link" to="/setting">设置</router-link>
-		  </el-menu-item>
-		</el-menu>
+		<ly-menu :collapse="$store.state.isCollapse">
+			<router-link class="ly-link" to="/gallery">
+				<i class="el-icon-folder"></i>
+				<span class="ly-menu-tit">图库</span>
+			</router-link>
+			<router-link class="ly-link" to="/projects">
+				<i class="el-icon-document"></i>
+				<span class="ly-menu-tit">项目</span>
+			</router-link>
+			<router-link class="ly-link" to="/mine">
+				<i class="el-icon-user"></i>
+				<span class="ly-menu-tit">我的</span>
+			</router-link>
+			<router-link class="ly-link" to="/favorite">
+				<i class="el-icon-collection-tag"></i>
+				<span class="ly-menu-tit">收藏夹</span>
+			</router-link>
+			<router-link class="ly-link" to="/setting">
+				<i class="el-icon-setting"></i>
+				<span class="ly-menu-tit">设置</span>
+			</router-link>
+			<a class="ly-link" href="http://blog.sanhulaojie.cn" target="_blank">
+				<i class="el-icon-eleme"></i>
+				<span class="ly-menu-tit">博客</span>
+			</a>
+		</ly-menu>
 	</div>
 </template>
 
@@ -37,16 +34,8 @@
 		name: 'ly-navbar',
 		data(){
 			return {
-				isCollapse: true
+				
 			}
-		},
-		methods: {
-		  handleOpen(key, keyPath) {
-			console.log(key, keyPath);
-		  },
-		  handleClose(key, keyPath) {
-			console.log(key, keyPath);
-		  }
 		}
 	}
 </script>
@@ -57,15 +46,11 @@
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
-		overflow-y: auto;
 		background-color: white;
 	}
 	.navbar-title{
 		padding: 1em 0;
 		border-right: solid 1px #e6e6e6;;
-	}
-	.navbar ul{
-		height: 100%;
 	}
 	
 	.item-tit{

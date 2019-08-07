@@ -2,7 +2,7 @@
 import Pages from "./pages/_index.js"
 
 let routes = [
-	{ path: '/hello', component: Pages.HelloWorld, name: '导航页'},
+	{ path: '/hello', component: Pages.hello, name: '导航页'},
 	{ 
 		path: '/home', component: Pages.home,
 		children: [

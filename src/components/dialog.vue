@@ -1,6 +1,6 @@
 <template>
 	<div class="dialog">
-		<div class="content" @click.stop="preventDefault">
+		<div class="content" @click.stop="preventDefault" :class="inSize">
 			<span class="delete" @click="close"><i class="el-icon-close"></i></span>
 			<slot></slot>
 		</div>
@@ -10,10 +10,16 @@
 <script>
 	export default {
 		name: 'ly-dialog',
-		props: ['size'],
+		props: ['size','name'],
+		data(){
+			return {
+				ourSize: ['sm','md','lg'],
+				inSize: this.size || 'sm'
+			}
+		},
 		methods: {
 			close(event){
-				this.$parent.$data.dialogView = false;
+				this.$emit('close','close')
 			},
 			preventDefault(event){
 				event && event.preventDefault();
@@ -31,8 +37,6 @@
 		background-color: rgba(0,0,0,.2);
 	}
 	.dialog .content{
-		width: 60%;
-		max-width: 450px;
 		min-height: 100px;
 		padding: 1.5em 1em;
 		margin: 10% auto;
@@ -42,9 +46,15 @@
 	}
 	.dialog .content.sm{
 		width: 40%;
+		max-width: 450px;
+	}
+	.dialog .content.md{
+		width: 60%;
+		max-width: 650px;
 	}
 	.dialog .content.lg{
 		width: 80%;
+		max-width: 850px;
 	}
 	.dialog .content .input-item{
 		color: #333333;

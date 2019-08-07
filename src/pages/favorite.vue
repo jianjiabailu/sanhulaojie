@@ -1,24 +1,19 @@
 <template>
 	<div>
-		<table border="1">
-			<tr>
-				<td>logo</td>
-				<td>名称</td>
-				<td>地址</td>
-				<td>操作</td>
-			</tr>
+		<ly-table>
+			<tr><td>logo</td><td>名称</td><td>地址</td><td>操作</td></tr>
 			<tr v-for="(item,index) in tableData" :key="item.id">
-				<td>{{item.icon}}</td>
+				<td><img :src="item.icon" alt=""></td>
 				<td>{{item.title}}</td>
-				<td>{{item.link}}</td>
+				<td><a :href="item.link">{{item.link}}</a></td>
 				<td>
-					<i class="el-icon-delete"></i>
-					<i class="el-icon-edit" @click="deleteFavorite(item,index)"></i>
-					<i class="el-icon-paperclip"></i>
+					<i class="el-icon-delete" @click="deleteFavorite(item,index)"></i>
+					<i class="el-icon-edit"></i>
 				</td>
 			</tr>
 			<tr><td colspan="4" @click="createFavorite">添加</td></tr>
-		</table>
+		</ly-table>
+		
 	</div>
 </template>
 
@@ -99,6 +94,9 @@
 
 <style>
 	i{
+		margin-right: 1rem;
 		cursor: pointer;
 	}
+	i:last-child{margin-right: 0;}
+	
 </style>
