@@ -12,6 +12,7 @@ let routes = [
 			{ path: '/favorite', component: Pages.favorite, name: '收藏夹'},
 			{ path: '/teamDetail', component: Pages.teamDetail, name: '团队详情'},
 			{ path: '/survey', component: Pages.survey, name: '调查问卷'},
+			{ path: '/goods', component: Pages.myGoods, name: '商品管理'},
 			{ path: '/projects', component: Pages.projects, name: '项目'},
 			{ path: '/create', component: Pages.create, name: '添加项目'},
 			{ path: '/', redirect: '/gallery'}

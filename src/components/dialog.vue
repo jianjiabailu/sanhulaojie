@@ -1,7 +1,8 @@
 <template>
 	<div class="dialog">
 		<div class="content" @click.stop="preventDefault" :class="inSize">
-			<span class="delete" @click="close"><i class="el-icon-close"></i></span>
+			<h4 class="dialog-tit">{{dialogTitle}}</h4>
+			<span class="dialog-del" @click="close"><i class="el-icon-close"></i></span>
 			<slot></slot>
 		</div>
 	</div>
@@ -10,10 +11,10 @@
 <script>
 	export default {
 		name: 'ly-dialog',
-		props: ['size','name'],
+		props: ['size','name','title'],
 		data(){
 			return {
-				ourSize: ['sm','md','lg'],
+				dialogTitle: this.title,
 				inSize: this.size || 'sm'
 			}
 		},
@@ -30,6 +31,7 @@
 
 <style scoped>
 	.dialog{
+		z-index: 999;
 		width: 100vw;
 		height: 100vh;
 		position: fixed;
@@ -37,15 +39,17 @@
 		background-color: rgba(0,0,0,.2);
 	}
 	.dialog .content{
+		overflow: hidden;
 		min-height: 100px;
-		padding: 1.5em 1em;
-		margin: 10% auto;
+		padding: 2rem 1rem 1rem;
+		margin: 10rem auto 0;
 		position: relative;
 		border-radius: 5px;
 		background-color: white;
 	}
 	.dialog .content.sm{
 		width: 40%;
+		min-width: 300px;
 		max-width: 450px;
 	}
 	.dialog .content.md{
@@ -60,9 +64,14 @@
 		color: #333333;
 		margin: 1em auto;
 	}
-	.delete{
+	.dialog-del{
 		cursor: pointer;
 		position: absolute;
-		right: 1em; top: 1em;
+		right: 1em; top: .5em;
+	}
+	.dialog-tit{
+		position: absolute;
+		left: 2em; top: 1em;
+		margin: 0;
 	}
 </style>

@@ -12,7 +12,6 @@
 
 <style>
 	.ly-table{
-		margin: 2rem auto;
 		border-top: 1px solid #D9D9D9;
 		border-bottom: 1px solid #D9D9D9;
 	}

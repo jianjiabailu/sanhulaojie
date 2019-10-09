@@ -1,22 +1,24 @@
 <template>
-  <div class="hello" v-starrySky id="starrySky">
-	<div class="box-fd flex-row-r a-center" v-if="loginsign">
-		<router-link to="/mine"><el-avatar size="medium" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar></router-link>
-		<a><i class="el-icon-switch-button"></i>注销</a>
-		<router-link to="/home">管理台</router-link>
+  <div class="hello" v-canvas-bg="background">
+	<!-- 会员菜单栏 -->
+	<div class="box-hd flex-row-r a-center" v-if="userid!=''">
+		<router-link to="/home" class="flex-col j-center">
+			<el-avatar size="medium" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+		</router-link>
+		<el-button size="mini" icon="el-icon-switch-button" @click="logout" circle></el-button>
+		<el-switch v-model="is_private" active-value="1" inactive-value="0"></el-switch>
 	</div>
-	<div class="box-hd">
+	<div class="box-bd">
+		<!-- 荡秋千的小女孩 -->
 		<swing-girl size="150"></swing-girl>
 		<div class="search-box">
-			<div class="input-item">
-				<input type="text" v-model="searchValue" @keyup.enter="searchBD">
-				<button @click="searchBD" >搜索</button>
-			</div>
+			<!-- 搜索框 -->
+			<ly-search class="input-item"></ly-search>
 			<!-- 收藏链接 -->
 			<div class="quick-link">
 				<el-row :gutter="10">
-				  <el-col :span="6" v-for="item in quickLinks" :key="item.id">
-					  <a class="link" :href="item.link" target="_blank"><i class="el-icon-star-on"></i>{{item.title}}</a>
+				  <el-col :span="6" v-for="item in links" :key="item.id">
+					  <a class="link" :class="item.is_private == '0'?'':'private'" :href="item.link" target="_blank"><i class="el-icon-star-on"></i>{{item.title}}</a>
 				  </el-col>
 				  <el-col :span="6" v-if="!editBox.view">
 					  <button class="link" @click="showEditBox"><i class="el-icon-edit"></i>编辑</button>
@@ -27,261 +29,233 @@
 		<!-- 自定义栏 -->
 		<div class="diy-box flex-col">
 			<!-- 登录按钮 -->
-			<div class="login-btn" @click="loginBox=true"><img src="../assets/img/Earth.png" alt=""></div>
+			<div class="login-btn" @click="showLoginBox"><img src="../assets/img/Earth.png" alt=""></div>
 		</div>
-		<!-- 登录框 -->
-		<transition name="slide-fade">
-			<ly-dialog size="sm" @close="loginBox=false" v-if="loginBox">
-				<div class="login-box">
-					<div>对话框</div>
-					<div class="input-item">
-						<input type="text" placeholder="用户名">
-					</div>
-					<div class="input-item">
-						<input type="password" placeholder="密码">
-					</div>
-					<div class="flex-row around">
-						<el-button size="medium" @click="loginBox=false">取消</el-button>
-						<el-button size="medium" type="primary" @click="submit">登录</el-button>
-					</div>
-				</div>
-			</ly-dialog>
-		</transition>
-		<!-- 编辑框 -->
-		<transition name="slide-fade">
-			<ly-dialog size="md" @close="editBox.view=false" v-if="editBox.view">
-				<!-- 编辑链接 -->
-				<ul class="edit-link">
-					<li class="flex-row between input-item" v-for="(item, index) in quickLinks" :key="item.id">
-						<input class="name" type="text" v-model="item.title" placeholder="网站名称">
-						<input class="path" type="text" v-model="item.link" placeholder="网站地址">
-						<button @click="delLink(index)">删除</button>
-					</li>
-					<li class="flex-row between input-item" v-if="editBox.isAdd">
-						<input class="name" type="text" v-model="editBox.addLink.title" placeholder="网站名称">
-						<input class="path" type="text" v-model="editBox.addLink.link" placeholder="网站地址">
-						<button class="edit-btn" @click="hideEditBox">保存</button>
-					</li>
-				</ul>
-				<div class="flex-row around">
-					<el-button size="medium" @click="createLink" v-if="!editBox.isAdd"><i class="el-icon-circle-plus"></i>添加</el-button>
-					<el-button size="medium" type="primary" @click="complete"><i class="el-icon-success"></i>完成</el-button>
-				</div>
-			</ly-dialog>
-		</transition>
 	</div>
-	
+	<transition name="slide-fade">
+		<!-- 登录框 -->
+		<ly-dialog size="sm" @close="loginBoxView=false" v-if="loginBoxView" title="登录">
+			<div class="login-box">
+				<el-input type="text" placeholder="用户名" v-model="loginInfo.username"></el-input>
+				<el-input type="password" placeholder="密码" v-model="loginInfo.password"></el-input>
+				<div class="flex-row around">
+					<el-button size="small" @click="loginBoxView=false">取消</el-button>
+					<el-button size="small" type="primary" @click="submit" :disabled="!(loginInfo.username && loginInfo.password)">登录</el-button>
+				</div>
+			</div>
+		</ly-dialog>
+		<!-- 编辑框 -->
+		<ly-dialog size="md" @close="editBox.view=false" v-if="editBox.view" title="我的收藏">
+			<!-- 编辑链接 -->
+			<ul class="edit-link">
+				<li class="flex-row between input-item" v-for="(item, index) in links" :key="item.id">
+					<input class="name" type="text" v-model="item.title" placeholder="网站名称">
+					<input class="path" type="text" v-model="item.link" placeholder="网站地址">
+					<el-button @click="delLink(index)">删除</el-button>
+				</li>
+				<li class="flex-row between input-item" v-if="editBox.isAdd">
+					<input class="name" type="text" v-model="editBox.addLink.title" placeholder="网站名称">
+					<input class="path" type="text" v-model="editBox.addLink.link" placeholder="网站地址">
+					<el-button @click="hideEditBox">保存</el-button>
+				</li>
+			</ul>
+			<div class="flex-row around">
+				<el-button size="small" @click="createLink" v-if="!editBox.isAdd"><i class="el-icon-circle-plus"></i>添加</el-button>
+				<el-button size="small" type="primary" @click="complete"><i class="el-icon-success"></i>完成</el-button>
+			</div>
+			
+		</ly-dialog>
+	</transition>
   </div>
 </template>
 
 <script>
+	
 export default {
   name: 'hello',
   data(){
     return {
-	  searchValue: '',
-	  quickLinks: localStorage.getItem('quickLinks') ? JSON.parse(localStorage.getItem('quickLinks')) : [],
+	  // 背景设置
+	  background: 'starrySky',
+	  userid: '',
+	  quickLinks: [],
 	  editBox: {
-		  view: false,links: [],
+		  view: false,
 		  isAdd: false,
-		  addLink: {
-			  title:'',
-			  link:''
-		  }
+		  addLink: {title:'',link:''}
 	  },
-	  username: '',
-	  password: '',
-	  loginBox: false,
-	  loginsign: localStorage.getItem('token') ? true : false
+	  is_private: '0',
+	  loginBoxView: false,
+	  loginInfo: {
+		  username: '',
+		  password: ''
+	  },
+	  loadingOptions: {
+		  lock: true,
+		  text: 'Loading',
+		  spinner: 'el-icon-loading',
+		  background: 'rgba(0, 0, 0, 0.7)'
+	  }
     }
   },
+  computed: {
+    links: function(){
+		let quickLinks = this.$data.quickLinks;
+		if(this.$data.is_private == '1'){
+			return quickLinks;
+		}else{
+			let links = [];
+			for (let item of quickLinks) {
+				item.is_private == '0' && links.push(item)
+			}
+			return links
+		}
+	}
+  },
   mounted(){
-	this.getFavorite()
+	if(localStorage.getItem('userid')) {
+		this.$data.userid = localStorage.getItem('userid');
+		this.getFavorite()
+	} else if (localStorage.getItem('quickLinks')){
+		this.$data.quickLinks = JSON.parse(localStorage.getItem('quickLinks'));
+	}
   },
   methods: {
 	  // 登录账户
-	  submit(){
-		this.$http.post('http://api.sanhulaojie.cn:8888/admin/user',{},{
-			headers: {'method': 'login'}
-		}).then(res => {
-			// get body data
+	  submit: function(){
+		// 开始加载
+		const loading = this.$loading(this.$data.loadingOptions);
+		const request_url = this.$store.state.request_url + '/user/login';
+		this.$http.post(request_url, this.$data.loginInfo).then(res => {
+			// 关闭加载
+			loading.close();
 			console.log('login',res)
-			if(res.status == 200){
-				localStorage.setItem('token',res.data.token)
-				this.$data.dialogView = false;
-				this.$data.loginsign = true;
+			if(res.body.returncode == 100){
+				this.$message('登录成功');
+				this.$data.loginBoxView = false;
+				this.$data.userid = res.body.data.userid;
+				localStorage.setItem('userid',res.body.data.userid)
+				this.getFavorite()
+			}else{
+				this.$message('登录失败，'+res.body.message);
 			}
-		}, err => {
-			// error callback
-			console.log('网络错误，登录失败',err)
 		});
 	  },
-	  // 百度搜索
-	  searchBD(){
-		window.location.href = "https://www.baidu.com/s?wd="+this.$data.searchValue
+	  
+	  // 注销
+	  logout: function(){
+		  sessionStorage.removeItem('userid')
+		  this.$data.userid = '';
+		  this.$message('注销成功');
 	  },
-	  // 编辑
-	  showEditBox(){
-		// 关闭操作框
-		this.$data.diyView = false;
-		// 打开编辑框
+		
+	  // 打开登录框
+	  showLoginBox: function(){
+		  if(this.$data.userid) {
+		  	this.$message('已登录状态');
+		  }else{
+			this.loginBoxView = true
+		  }
+	  },
+	  // 打开编辑框
+	  showEditBox: function(){
 		this.$data.editBox.view = true;
-		// 获取编辑列表
-		this.$data.editBox.links = this.$data.quickLinks;
 	  },
+	  
 	  // 保存
-	  hideEditBox(){
+	  hideEditBox: function(){
 		this.$data.editBox.isAdd = false;
 		if(this.$data.editBox.addLink.title && this.$data.editBox.addLink.link){
-			let params = {
-				data: {
-					icon: '',
-					title: this.$data.editBox.addLink.title,
-					link: this.$data.editBox.addLink.link
-				},
-				headers: {
-					'method': 'createFavorite',
-					'token': localStorage.getItem('token')
+			const params = {
+				title: this.$data.editBox.addLink.title,
+				link: this.$data.editBox.addLink.link
+			};
+			const request_url = this.$store.state.request_url + '/user/createFavorite';
+			this.$http.post(request_url,params).then(res => {
+				console.log('createFavorite',res)
+				if(res.body.returncode == 100){
+					this.getFavorite()
 				}
-			}
-			this.$http.post('http://sanhulaojie.cn:8888/admin/user',params.data,{headers: params.headers})
-			.then(res => {
-				this.getFavorite()
-			}, error => console.log(error));
+			});
 		}
 	  },
+	  
 	  // 添加
-	  createLink(){
+	  createLink: function(){
 	  	this.$data.editBox.isAdd = true;
 		this.$data.editBox.addLink = [];
 	  },
+	  
 	  // 删除
-	  delLink(index){
-		let params = {
-			data: {id: this.$data.editBox.links[index].id},
-			headers: {
-				'method': 'deleteFavorite',
-				'token': localStorage.getItem('token')
+	  delLink: function(index){
+		const params = {id: this.$data.quickLinks[index].id};
+		const request_url = this.$store.state.request_url + '/user/deleteFavorite';
+		this.$http.delete(request_url, params).then(res => {
+			console.log('delLink',res)
+			if(res.body.returncode == 100){
+				this.$data.quickLinks.splice(index,1)
+				this.getFavorite()
 			}
-		}
-		this.$http.post('http://sanhulaojie.cn:8888/admin/user',params.data,{headers: params.headers})
-		.then(res => {
-			this.$data.editBox.links.splice(index,1)
-			this.getFavorite()
-		}, error => console.log(error));
+		});
 	  },
+	  
 	  // 完成编辑
-	  complete(){
+	  complete: function(){
 		  this.$data.editBox.isAdd = false;
 		  this.$data.editBox.view = false;
 	  },
+	  
 	  // 获取收藏夹
-	  getFavorite(){
-	  	this.$http.post('http://sanhulaojie.cn:8888/admin/user',{},{
-	  		headers: {
-	  			'method': 'getFavorite',
-	  			'token': localStorage.getItem('token')
-	  		}
-	  	}).then(res => {
-	  		this.$data.quickLinks = res.body;
-	  	}, error => console.log(error));
+	  getFavorite: function(){
+		const request_url = this.$store.state.request_url + '/user/getFavorites?userid=' + this.$data.userid;
+	  	this.$http.get(request_url).then(res => {
+			console.log('getFavorite',res)
+			if(res.body.returncode == 100){
+				this.$data.quickLinks = res.body.data;
+			}
+	  	})
 	  }
   }
 }
 </script>
 <!-- 添加“scoped” 属性以仅将CSS限制到此组件 -->
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 	.hello{
 		box-sizing: border-box;
 		background: transparent;
 		width: 100vw; height: 100vh;
 		overflow: hidden;
-		background: url(../assets/img/starry-5.jpg) no-repeat;
-		background-size: 100% 100%;
+		/* background-image: url(../assets/img/starry-5.jpg); */
 	}
-	.box-fd{
+	.box-hd{
 		z-index: 10;
 		position: fixed;
 		left: 0; top: 0;
-		width: 100%; height: 50px;
+		width: 100%; 
+		height: 50px;
+		padding: 0 2rem;
 		box-sizing: border-box;
 		background-color: rgba(100,100,100,.5);
 	}
-	.box-fd a{
-		color: white;
-		line-height: 50px;
-		margin: 0 1em;
-		display: inline-block;
-	}
-	.box-fd img{vertical-align: middle;}
 	
-	.hello > .box-hd{
+	.box-hd button{margin: 0 1rem;}
+	
+	.box-bd{
 		z-index: 9;
 		width: 100%; height: 100%;
 		position: relative;
 	}
-	button{cursor: pointer;}
+	
 	.search-box{
 		width: 100%;
 		position: fixed;
-		top: 30%;
+		top: 35%;
 	}
-	
-	.input-item{
-		position: relative;
+	.search-box .input-item{
+		width: 80%;
 		max-width: 650px;
-		height: 32px;
-		line-height: 32px;
 		margin: 0 auto;
-		color: white;
-		display: flex;
-		box-sizing: border-box;
-		border: 1px solid #02aeff;
-	}
-	
-	.input-item:hover{
-		animation: shine-animation 1s ease-in-out 100ms infinite alternate;
-	}
-	@-webkit-keyframes shine-animation {
-	  from {
-	    -webkit-box-shadow: 0 0 5px #02aeff;
-			box-shadow: 0 0 5px #02aeff;
-	  }
-	  to {
-	    -webkit-box-shadow: 0 0 20px #02aeff;
-	    	box-shadow: 0 0 20px #02aeff;
-	  }
-	}
-	@keyframes shine-animation {
-	  from {
-	    -webkit-box-shadow: 0 0 5px #02aeff;
-	  			box-shadow: 0 0 5px #02aeff;
-	  }
-	  to {
-	    -webkit-box-shadow: 0 0 20px #02aeff;
-	    	box-shadow: 0 0 20px #02aeff;
-	  }
-	}
-	.input-item input{
-		border: none;
-		outline: none;
-		display: inline-block;
-		color: inherit;
-		width: 100%;
-		min-width: 100px;
-		font-size: 1em;
-		padding: 0 1em;
-		background-color: transparent;
-	}
-	.input-item button{
-		color: white;
-		border: none;
-		outline: none;
-		padding: 0 1em;
-		display: inline-block;
-		white-space: nowrap;
-		background-color: #02AEFF;
 	}
 	
 	/* 快速链接 */
@@ -297,14 +271,22 @@ export default {
 		width: 100%;
 		height: 30px;
 		line-height: 30px;
+		cursor: pointer;
 		overflow: hidden;
 		white-space: nowrap;
 		text-align: center;
 		text-overflow: ellipsis;
 		margin-bottom: 1em;
+		border-radius: 3px;
 		background-color: rgba(255,255,255,.3);
 	}
-	.quick-link .link:hover{color: #00FFFF;}
+	.quick-link .link.private{
+		background-color: rgba(255,0,0,.3);
+	}
+	.quick-link .link:hover{color: #00FFFF;background-color: rgba(255,255,255,.5);}
+	.quick-link .link.private:hover{
+		background-color: rgba(255,0,0,.5);
+	}
 	.link .ico{width: 1em;display: inline-block;margin-right: .5em;}
 	
 	.diy-box{
@@ -313,20 +295,23 @@ export default {
 		left: 0; bottom: 20%;
 		overflow: hidden;
 	}
+	.login-box{
+		width: 300px;
+		margin: 0 auto;
+	}
+	.login-box .el-input{
+		margin: .5rem 0;
+	}
 	.login-btn{
 		display: block;
 		margin: 0 auto;
 		width: 100px; height: 100px;
-		border-radius: 60px;
+		border-radius: 50%;
 		animation: spin 10s linear 100ms infinite;
 	}
 	@keyframes spin{
-		from{
-			transform: rotate(0);
-		}
-		to{
-			transform: rotate(360deg);
-		}
+		from{transform: rotate(0);}
+		to{transform: rotate(360deg);}
 	}
 	.login-btn img{
 		cursor: pointer;

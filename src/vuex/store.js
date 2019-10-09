@@ -5,18 +5,19 @@ Vue.use(Vuex)
 
 const state = {
     count: 0,
-	isCollapse: true
+	isCollapse: true,
+	userid: localStorage.getItem('userid'),
+	request_url: 'http://api.sanhulaojie.cn:8080' //'http://localhost:8888',
 }
 const actions = {
     actionsAddCount(context, n = 0) {
-        console.log(context)
         return context.commit('mutationsAddCount', n)
     },
     actionsReduceCount({ commit }, n = 0) {
         return commit('mutationsReduceCount', n)
     }
 }
-const getters = {
+const getters = { 
     getterCount(state, n = 0) {
         return (state.count += n)
     }

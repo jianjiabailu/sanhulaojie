@@ -1,25 +1,9 @@
 <template>
-	<div class="navbar">
+	<div class="ly-navbar">
 		<ly-menu :collapse="$store.state.isCollapse">
-			<router-link class="ly-link" to="/gallery">
-				<i class="el-icon-folder"></i>
-				<span class="ly-menu-tit">图库</span>
-			</router-link>
-			<router-link class="ly-link" to="/projects">
-				<i class="el-icon-document"></i>
-				<span class="ly-menu-tit">项目</span>
-			</router-link>
-			<router-link class="ly-link" to="/mine">
-				<i class="el-icon-user"></i>
-				<span class="ly-menu-tit">我的</span>
-			</router-link>
-			<router-link class="ly-link" to="/favorite">
-				<i class="el-icon-collection-tag"></i>
-				<span class="ly-menu-tit">收藏夹</span>
-			</router-link>
-			<router-link class="ly-link" to="/setting">
-				<i class="el-icon-setting"></i>
-				<span class="ly-menu-tit">设置</span>
+			<router-link v-for="item in routerLinks" :key="item.path" class="ly-link" :to="item.path">
+				<i :class="item.icon"></i>
+				<span class="ly-menu-tit">{{item.name}}</span>
 			</router-link>
 			<a class="ly-link" href="http://blog.sanhulaojie.cn" target="_blank">
 				<i class="el-icon-eleme"></i>
@@ -34,23 +18,29 @@
 		name: 'ly-navbar',
 		data(){
 			return {
-				
+				routerLinks: [
+					{name: '图库',path: '/gallery',icon: 'el-icon-folder'},
+					{name: '商品管理',path: '/goods',icon: 'el-icon-shopping-bag-2'},
+					{name: '我的',path: '/mine',icon: 'el-icon-user'},
+					{name: '收藏夹',path: '/favorite',icon: 'el-icon-collection-tag'},
+					{name: '设置',path: '/setting',icon: 'el-icon-setting'}
+				]
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	img{max-width: 100%;}
-	.navbar{
+	.ly-navbar{
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
 		background-color: white;
 	}
+	img{max-width: 100%;}
 	.navbar-title{
 		padding: 1em 0;
-		border-right: solid 1px #e6e6e6;;
+		/* border-right: solid 1px #e6e6e6;; */
 	}
 	
 	.item-tit{

@@ -20,7 +20,7 @@
 		overflow-y: auto;
 		position: relative;
 		margin: 0; padding: 0;
-		border-right: 1px solid #D9D9D9;
+		/* border-right: 1px solid #D9D9D9; */
 	}
 	.ly-menu.row{
 		display: flex;

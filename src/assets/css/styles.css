@@ -1,4 +1,6 @@
 
+.t-center{text-align: center;}
+
 .flex-row{display: flex;flex-direction: row;}
 .flex-row-r{display: flex;flex-direction: row-reverse;}
 .flex-col{display: flex;flex-direction: column;}
@@ -16,6 +18,7 @@
 	overflow: hidden;
 	text-overflow:ellipsis;
 	white-space: nowrap;
+	font-weight: bold;
 }
 
 .ellipsis-2{

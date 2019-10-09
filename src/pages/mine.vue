@@ -1,104 +1,102 @@
 <template>
 	<div class="mine-page">
 		<el-row :gutter="20">
-		  <el-col :xs="24" :sm="12">
-			<ly-card class="form">
-				<el-form ref="information" :model="information" label-width="100px">
-						<h4>个人信息</h4>
-						<el-divider></el-divider>
-						<el-form-item label="姓名">
-							<el-input v-model="information.name"></el-input>
-						</el-form-item>
-						<el-form-item label="性别">
-							<el-radio-group v-model="information.sex">
-								<el-radio label="男"></el-radio>
-								<el-radio label="女"></el-radio>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item label="出生日期">
-							<el-date-picker type="date" placeholder="选择日期" v-model="information.birthday" style="width: 100%;"></el-date-picker>
-						</el-form-item>
-						<el-form-item label="籍贯">
-							<el-input v-model="information.nativePlace"></el-input>
-						</el-form-item>
-						<el-form-item label="联系方式">
-							<el-input v-model="information.phone"></el-input>
-						</el-form-item>
-						<el-form-item label="电子邮箱">
-							<el-input v-model="information.email"></el-input>
-						</el-form-item>
-						<el-form-item label="兴趣爱好">
-							<el-checkbox-group v-model="information.interests">
-							  <el-checkbox label="听歌" name="type"></el-checkbox>
-							  <el-checkbox label="看电影" name="type"></el-checkbox>
-							  <el-checkbox label="跑步" name="type"></el-checkbox>
-							  <el-checkbox label="打篮球" name="type"></el-checkbox>
-							  <el-checkbox label="羽毛球" name="type"></el-checkbox>
-							</el-checkbox-group>
-						</el-form-item>
-						 <!-- <el-form-item label="即时配送">
-							<el-switch v-model="form.delivery"></el-switch>
-						  </el-form-item> -->
-						<el-form-item label="现住地址">
-							<el-input type="textarea" v-model="information.address"></el-input>
-						</el-form-item>
-						
-						<h4>教育经历</h4>
-						<el-divider></el-divider>
-						
-						<el-form-item label="最高学历">
-							<el-select v-model="information.education" placeholder="请选择性别">
-							  <el-option label="高中" value="1"></el-option>
-							  <el-option label="大专" value="2"></el-option>
-							  <el-option label="本科" value="3"></el-option>
-							  <el-option label="硕士" value="4"></el-option>
-							  <el-option label="博士" value="5"></el-option>
-							</el-select>
-						 </el-form-item>
-						<el-form-item label="学校名称">
-							<el-input v-model="information.school"></el-input>
-						</el-form-item>
-						<el-form-item label="就读院系">
-							<el-input v-model="information.faculty"></el-input>
-						</el-form-item>
-						<el-form-item label="毕业时间">
-							<el-date-picker type="date" placeholder="选择日期" v-model="information.graduation" style="width: 100%;"></el-date-picker>
-						</el-form-item>
-						 
-						<el-form-item>
-							<el-button type="primary" @click="save">保存</el-button>
-							<el-button>取消</el-button>
-						</el-form-item>
-					</el-form>
-			</ly-card>
-		  </el-col>
-		  <el-col :xs="24" :sm="12">
-			<ly-card class="resume">
-				<div class="tit-1">
-					<p><span>姓名：{{information.name}}</span></p>
-					<p class="flex-row between">
-						<span>籍贯：{{information.nativePlace}}</span>
-						<span>工作经验：{{information.experience}}</span>
-					</p>
-					<p class="flex-row between">
-						<span>出生年份：{{information.birthday}}</span>
-						<span>联系电话：{{information.phone}}</span>
-					</p>
-					<p class="flex-row between">
-						<span>电子邮箱：{{information.email}}</span>
-						<span>现居地址：{{information.address}}</span>
-					</p>
-				</div>
-				<p><el-divider content-position="left">教育经历</el-divider></p>
-				<div>
-					<p class="flex-row between">
-						<span>学校：{{information.email}}</span>
-						<span>现居地址：{{information.address}}</span>
-					</p>
-				</div>
-				
-			</ly-card>
-		  </el-col>
+			
+			<el-col :xs="24" :sm="12">
+				<el-form :label-position="labelPosition" :model="goodsInfo" label-width="100px">
+					<h4>添加商品</h4>
+					<el-divider></el-divider>
+					<el-form-item label="商品编号">
+						<el-col :span="12">
+							<el-input v-model="goodsInfo.goodNo"></el-input>
+						</el-col>
+						<el-col :span="12">
+							<el-input v-model="goodsInfo.goodName"></el-input>
+						</el-col>
+					</el-form-item>
+					
+					<el-form-item label="正常价格">
+						<el-input type="number" v-model="goodsInfo.normalPrice"></el-input>
+					</el-form-item>
+					<el-form-item label="实际价格">
+						<el-input type="number" v-model="goodsInfo.realPrice"></el-input>
+					</el-form-item>
+					<el-form-item label="商品描述">
+						<el-input v-model="goodsInfo.goodsDesc"></el-input>
+					</el-form-item>
+					<el-form-item label="商品库存">
+						<el-input type="number" v-model="goodsInfo.goodsStock"></el-input>
+					</el-form-item>
+					<el-form-item label="商品图片">
+						<el-upload
+						   class="avatar-uploader"
+						   :action= "$store.state.request_url+'/user/uploadImage'"
+						   :show-file-list="false"
+						   :on-success="uploadSuccess"
+						   :before-upload="uploadBefore">
+						   <img v-if="information.imageUrl" :src="information.img_path" class="avatar">
+						   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						</el-upload>
+					</el-form-item>
+					<el-form-item label="是否上架">
+						<el-switch v-model="goodsInfo.isSale"></el-switch>
+					</el-form-item>
+					<el-form-item label="是否推荐">
+						<el-switch v-model="goodsInfo.isRecom"></el-switch>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="createGood">保存</el-button>
+						<el-button>取消</el-button>
+					</el-form-item>
+				</el-form>
+			</el-col>
+			
+			<el-col :xs="24" :sm="12">
+				<el-form :label-position="labelPosition" :model="information" label-width="100px">
+					<h4>添加项目</h4>
+					<el-divider></el-divider>
+					<el-form-item label="项目名称">
+						<el-input v-model="information.name"></el-input>
+					</el-form-item>
+					<el-form-item label="项目类型">
+						<el-radio-group v-model="information.type">
+							<el-radio label="小程序"></el-radio>
+							<el-radio label="web网站"></el-radio>
+							<el-radio label="app"></el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="活动时间">
+						<div class="flex-row">
+							<el-date-picker class="flex" type="date" value-format="yyyy-MM-dd" placeholder="开始日期" v-model="information.start_date"></el-date-picker>
+							<span class="line t-center" style="margin: 0 1rem;" :span="1">-</span>
+							<el-date-picker class="flex" type="date" value-format="yyyy-MM-dd" placeholder="结束日期" v-model="information.ending_date"></el-date-picker>
+						</div>
+					</el-form-item>
+					<el-form-item label="项目地址">
+						<el-input v-model="information.address"></el-input>
+					</el-form-item>
+					<el-form-item label="项目介绍">
+						<el-input type="textarea" v-model="information.intro"></el-input>
+					</el-form-item>
+					 
+					<el-form-item label="项目缩略图">
+						 <el-upload
+						   class="avatar-uploader"
+						   :action= "$store.state.request_url+'/user/uploadImage'"
+						   :show-file-list="false"
+						   :on-success="uploadSuccess"
+						   :before-upload="uploadBefore">
+						   <img v-if="information.imageUrl" :src="information.imageUrl" class="avatar">
+						   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						 </el-upload>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="save">保存</el-button>
+						<el-button>取消</el-button>
+					</el-form-item>
+				</el-form>
+			</el-col>
+			
 		</el-row>
 	</div>
 </template>
@@ -108,34 +106,81 @@
 		name: 'mine',
 		data(){
 			return {
+				// 表单子项标题位置 有效值：left、right、top
+				labelPosition: 'left',
 				information: {
-					name:'',   			// 姓名
-					sex:'',				// 性别
-					nativePlace:'',		// 籍贯
-					phone:'',			// 联系电话
-					email:'',			// 电子邮箱
-					experience:'',		// 工作经验
-					address:'',			// 现住地址
-					birthday:'',		// 出生日期
-					desc:'',			// 
-					education:'',		// 教育程度（最高学历）
-					interests: [],		// 兴趣爱好
-					school:'',			// 毕业学校
-					faculty:'',			// 专业院系
-					graduation:''		// 毕业时间
+					userid: 'vip0001',
+					type: '',
+					start_date: '',
+					ending_date: '',
+					imageUrl: '',
+					address: '',
+					intro: ''
+				},
+				goodsInfo: {
+					good_name: '',
+					good_price: '',
+					good_type: '',
+					good_inventory: '',
+					img_path: ''
+				},
+				rules: {
+				  pass: [
+					{ validator: 'validatePass', trigger: 'blur' }
+				  ],
+				  checkPass: [
+					{ validator: 'validatePass2', trigger: 'blur' }
+				  ],
+				  age: [
+					{ validator: 'checkAge', trigger: 'blur' }
+				  ]
 				}
 			}
 		},
 		methods:{
 			save(){
-				
+				// 添加项目
+				this.$http.post(this.$store.state.request_url + '/user/project',this.$data.information).then(res => {
+					console.log('getFavorite',res)
+					if(res.body.returncode == 100){
+						this.$data.tableData = res.body.data
+					}
+				})
+			},
+			createGood: function(){
+				// 添加项目
+				this.$http.post(this.$store.state.request_url + '/goods/createGoods',this.$data.goodsInfo).then(res => {
+					console.log('getFavorite',res)
+					if(res.body.returncode == 100){
+						this.$data.tableData = res.body.data
+					}
+				})
+			},
+			// 上传成功
+			uploadSuccess(res, file) {
+				console.log(res, file)
+				this.$data.information.imageUrl = URL.createObjectURL(file.raw);
+				console.log(this.$data.information.imageUrl)
+			},
+			// 上传校验
+			uploadBefore(file) {
+				const isJPG = file.type === 'image/png';
+				const isLt2M = file.size / 1024 / 1024 < 2;
+				if (!isJPG) {
+				  this.$message.error('上传头像图片只能是 png 格式!');
+				}
+				if (!isLt2M) {
+				  this.$message.error('上传头像图片大小不能超过 2MB!');
+				}
+				return isJPG && isLt2M;
 			}
 		}
 	}
 </script>
 
-<style>
+<style >
 	.form{
+		max-width: 650px;
 		padding: 1em;
 	}
 	.resume{
@@ -146,4 +191,28 @@
 		padding: 1em 2em;
 		background-color: gray;
 	}
+	
+	.avatar-uploader .el-upload {
+	    border-radius: 6px;
+	    cursor: pointer;
+	    position: relative;
+	    overflow: hidden;
+	    border: 1px dashed #d9d9d9;
+	  }
+	  .avatar-uploader .el-upload:hover {
+	    border-color: #409EFF;
+	  }
+	  .avatar-uploader-icon {
+	    font-size: 28px;
+	    color: #8c939d;
+	    width: 178px;
+	    height: 178px;
+	    line-height: 178px;
+	    text-align: center;
+	  }
+	  .avatar {
+	    width: 178px;
+	    height: 178px;
+	    display: block;
+	  }
 </style>
